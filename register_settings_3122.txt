@@ -1,0 +1,50 @@
+This file contains all of the desired settings for the VMIVME 3122 memory registers and the reasons for such.
+
+Memory Register Map:
+
+Register_Address	Register_Designation	DESIG	Access		Desired Value
+
+$0000			Board ID 		BIR	R		0x2E01
+$0002			Control and Status	CSR	R/W		0x88X0 (X represents board-controlled values like trigger armed and whatnot)
+$0004			Configuration Control	CCR	R/W		0xE440
+$0006			Rate Control  		RCR	R/W		0x026E
+$0008			Interrupt Control	ICR	R/W		0xFF00
+$000A			Interrupt Vector	IVR	R/W		0xXXXX
+$000C			Software Reset Command	SRC	W		0xXXXX
+$000E			SW Trigger Command	STC	W		0xXXXX
+$0010			Auto Gain  		GAIN	R/W		0xFF00
+$0012 to $001E		Reserved		--	N/A		------
+$0020 	 		Interval Timer 0	TR0	R/W		0xXXXX
+$0022			Interval Timer 1	TR1	R/W		0xXXXX
+$0024			Data Counter   		DCR	R/W		???
+$0026			Timer Control		TCR	W		0xXXXX
+$0028 to $007E		Reserved		--	N/A
+$0080 to $087E		Data Buffer		BUFF	R/W
+$0880 to $0FFE		Scratch Pad		RAM	R/W
+
+
+Notes for each register:
+
+$0000 (Board ID): Not sure if we want high/standard performance. This will determine the last two bits.
+
+$0002 (Control and Status): Ask about bit 11.
+
+$0004 (Configuration Control): Buffer size of 1024 words (do we need this many if we are only reading binary 'state' type data? Will this just give us excess data that we have to store?
+
+$0006 (Rate Control): Ask about this register and the Rate +3 stuff.
+
+$0008 (Interrupt Control): Currently set so that all interrupts are disabled.
+
+$000A (Interrupt Vector): Might not matter? Ask about this.
+
+$000C (SW Reset): Doesn't matter what is written here. Any write to this address will reset the board.
+
+$000E (SW Trigger Command): If both trigger mode bits are cleared in the CSR (address $0002), then a write to this address will generate a SW trigger.
+
+$0012 (Auto Gain): Bit 00 set to 0 gives gain of 1. Bit 00 set to 1 gives gain of 10.
+
+$0020 and $0022 (Interval Timers): We will not be taking data at set intervals but rather with T0 signal, so these registers seem superfluous.
+
+$0024 (Data Counter Register): Ask about this as well. I don't know if we would want to use this feature or not.
+
+$0026 (Timer Control Register): Won'e be using timed interval triggering so this address seems to not matter.
